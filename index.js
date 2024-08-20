@@ -1,29 +1,23 @@
-var http = require("http");
-var fs = require("fs");
+const express = require("express");
+const app = express();
+app.set("view engine", "ejs");
 
-var server = http.createServer((req,res) => {
-    if (req.url == "/") {
-        fs.readFile("index.html", (err,html) => {
-            res.write(html)
-            res.end(); 
+const data = [
+    { id: 1, name: "iphone 13", price: 30000, isActive: true },
+    { id: 2, name: "iphone 14", price: 40000, isActive: true },
+    { id: 3, name: "iphone 15", price: 50000, isActive: true },
 
-        });
-    }else if (req.url=="/urunler") {
-        fs.readFile("urunler.html", (err,html) => {
-            res.write(html)
-            res.end(); 
-        })
-    }else(req.url =="/404");{
-            fs.readFile("404.html", (err,html) => {
-                res.write(html)
-                res.end(); 
+];
 
-            });    }
-
-});
-
-server.listen(3000, () =>{
-    console.log("node.js server at port 3000")
-});
-
- 
+app.use("/products", function (req, res) {
+    res.render("products", { productList: data })
+})
+app.use("/404", function (req, res) {
+    res.render("404")
+})
+app.use("/", function (req, res) {
+    res.render("index")
+})
+app.listen(4000, () => {
+    console.log("listening on port 4000")
+})
